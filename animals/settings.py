@@ -30,6 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", "localkey2024") #replace the SECRET_KEY VARIABLE with this. this means the secret_key is localkey2024, if an environment variable isnt specified. we are going to specify one on render.com
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# RENDER is important because we're going to host this on render
 DEBUG =  'RENDER' not in os.environ  # replace the DEBUG variable with this. This means: If RENDER env var is set, DEBUG is False.when deployed to render.com this is always set by default from render.com
 
 ALLOWED_HOSTS = []
@@ -37,6 +38,7 @@ ALLOWED_HOSTS = []
 #right below the ALLOW_HOST  variable add this.
 ## Handling Allowed Hosts on Render
 ## adds the render.com hostname to be in ALLOWED_HOSTS
+# env with render  it's specific to render
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
@@ -51,12 +53,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'pets.apps.PetsConfig',
     'rest_framework',    
+    # make sure you have corsheaders for hosting
+    # Allows talking from deployed to the frontend
     "corsheaders", #add this below all the other apps
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # CORS middleware package, coming out of the cors headers
     "corsheaders.middleware.CorsMiddleware", #add this!!!!!!
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -64,6 +69,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# This is making sure no CORS errors
+
 #Below variable: MIDDLEWARES add this variable
 CORS_ALLOW_ALL_ORIGINS = True ## Variable CORS_ALLOW_ALL_ORIGINS is set to True to allow unrestricted access to the API.
 
